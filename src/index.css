@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/* IGRUS Design System — 본 프로젝트(frontend/src/index.css)에서 발췌 */
+
+@theme inline {
+  --radius-r1: 4px;
+  --radius-r2: 8px;
+  --radius-r3: 12px;
+  --radius-r4: 16px;
+  --radius-full: 100px;
+
+  --font-sans: "Inter", "Pretendard Variable", system-ui, sans-serif;
+
+  --spacing-s1: 4px;
+  --spacing-s2: 8px;
+  --spacing-s3: 12px;
+  --spacing-s4: 16px;
+  --spacing-s5: 24px;
+  --spacing-s6: 32px;
+  --spacing-s7: 48px;
+  --spacing-s8: 56px;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-brand-l1: var(--brand-l1);
+  --color-brand-l2: var(--brand-l2);
+  --color-brand-l3: var(--brand-l3);
+  --color-brand-l4: var(--brand-l4);
+  --color-brand-l5: var(--brand-l5);
+  --color-brand-l6: var(--brand-l6);
+  --color-brand-l7: var(--brand-l7);
+  --color-brand-l8: var(--brand-l8);
+}
+
+:root {
+  --brand-l1: #e6f6f5;
+  --brand-l2: #b3e5e2;
+  --brand-l3: #66cbc5;
+  --brand-l4: #03a69e;
+  --brand-l5: #03958e;
+  --brand-l6: #027a75;
+  --brand-l7: #015f5b;
+  --brand-l8: #013e3b;
+
+  --success: #28a745;
+  --warning: #ffc107;
+  --destructive: #dc3545;
+  --info: #17a2b8;
+
+  --background: #ffffff;
+  --foreground: #212529;
+  --card: #ffffff;
+  --card-foreground: #212529;
+  --primary: #03a69e;
+  --primary-foreground: #ffffff;
+  --secondary: #f8f9fa;
+  --secondary-foreground: #495057;
+  --muted: #f8f9fa;
+  --muted-foreground: #6c757d;
+  --accent: #e6f6f5;
+  --accent-foreground: #03958e;
+  --border: #dee2e6;
+  --input: #e9ecef;
+  --ring: #03a69e;
+}
+
+.dark {
+  --background: #212529;
+  --foreground: #f8f9fa;
+  --card: #343a40;
+  --card-foreground: #f8f9fa;
+  --primary: #66cbc5;
+  --primary-foreground: #212529;
+  --secondary: #343a40;
+  --secondary-foreground: #e9ecef;
+  --muted: #343a40;
+  --muted-foreground: #adb5bd;
+  --accent: #015f5b;
+  --accent-foreground: #e6f6f5;
+  --border: #495057;
+  --input: #343a40;
+  --ring: #66cbc5;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-family: "Pretendard Variable", "Inter", system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+
+@utility typo-h2 {
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.3;
+}
+
+@utility typo-h4 {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+@utility typo-b2 {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+}
