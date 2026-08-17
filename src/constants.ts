@@ -120,14 +120,5 @@ export const majorOptions = [
   },
 ] as const;
 
-export const domainOptions = [
-  { label: "inha.edu", value: "inha.edu" },
-  { label: "gmail.com", value: "gmail.com" },
-  { label: "naver.com", value: "naver.com" },
-  { label: "daum.net", value: "daum.net" },
-  { label: "kakao.com", value: "kakao.com" },
-  { label: "기타", value: "custom" },
-] as const;
-
 export const ENROLLMENT_STATUS_TITLE = "재학/휴학 여부";
 export const enrollmentStatusOptions = ["재학", "휴학 (일반)", "휴학 (군)"] as const;

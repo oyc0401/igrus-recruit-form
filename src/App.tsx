@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
   User,
-  Mail,
   Phone,
   Building2,
   ChevronDown,
@@ -13,14 +12,12 @@ import {
   Wallet,
   Copy,
   CircleCheck,
-  ShieldCheck,
   ExternalLink,
   type LucideIcon,
 } from "lucide-react";
 import { Button, Input, cn } from "./ui";
 import {
   majorOptions,
-  domainOptions,
   ENROLLMENT_STATUS_TITLE,
   enrollmentStatusOptions,
 } from "./constants";
@@ -58,17 +55,11 @@ const signupSchema = z.object({
     .optional()
     .refine((v) => v !== undefined, { message: "학년을 선택해주세요." }),
   enrollmentStatus: z.string().min(1, "재학/휴학 여부를 선택해주세요."),
-  emailLocal: z.string().min(1, "이메일을 입력해주세요."),
-  emailDomain: z.string().min(1, "도메인을 선택해주세요."),
-  customDomain: z.string().optional(),
   phoneNumber: z
     .string()
     .min(1, "전화번호를 입력해주세요.")
     .regex(/^\d{3}-\d{4}-\d{4}$/, "올바른 전화번호를 입력해주세요."),
   department: z.string().min(1, "학과를 선택해주세요."),
-  privacyConsent: z.literal(true, {
-    message: "개인정보 처리방침에 동의해주세요.",
-  }),
 });
 
 type SignupFormData = z.infer<typeof signupSchema>;
@@ -85,7 +76,6 @@ export default function App() {
     handleSubmit,
     watch,
     setValue,
-    getValues,
     formState: { errors, isSubmitting },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
@@ -95,17 +85,11 @@ export default function App() {
       gender: undefined as unknown as "MALE" | "FEMALE",
       grade: undefined as unknown as number,
       enrollmentStatus: "",
-      emailLocal: "",
-      emailDomain: "inha.edu",
-      customDomain: "",
       phoneNumber: "",
       department: "",
-      privacyConsent: undefined as unknown as true,
     },
     mode: "onTouched",
   });
-
-  const emailDomain = watch("emailDomain");
 
   const handleCopyAccount = async () => {
     await navigator.clipboard.writeText("토스뱅크 1002-3803-2581");
@@ -121,8 +105,6 @@ export default function App() {
       );
       return;
     }
-    const domain =
-      data.emailDomain === "custom" ? data.customDomain : data.emailDomain;
     try {
       // Content-Type 미지정(text/plain) → CORS preflight 없이 Apps Script로 전송 가능
       const res = await fetch(GAS_URL, {
@@ -134,7 +116,6 @@ export default function App() {
           department: data.department,
           grade: `${data.grade}학년`,
           enrollmentStatus: data.enrollmentStatus,
-          email: `${data.emailLocal}@${domain}`,
           phoneNumber: data.phoneNumber,
         }),
       });
@@ -370,81 +351,6 @@ export default function App() {
           </FormField>
         </Section>
 
-        {/* 이메일 */}
-        <Section icon={Mail} title="이메일" hint="연락받을 이메일이에요">
-          <FormField
-            error={errors.emailLocal?.message || errors.customDomain?.message}
-          >
-            <div className="flex items-center gap-s2">
-              <div className="relative flex-1">
-                <Mail
-                  size={18}
-                  className="absolute left-s3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                />
-                <Input
-                  {...register("emailLocal")}
-                  placeholder="이메일"
-                  autoComplete="email"
-                  className="h-11 rounded-r3 pl-10"
-                />
-              </div>
-              <span className="text-muted-foreground font-bold shrink-0">@</span>
-              <div className="relative flex-1">
-                <select
-                  {...register("emailDomain")}
-                  className={cn(
-                    "w-full h-11 rounded-r3 border border-input bg-background text-foreground px-s3 text-sm",
-                    "appearance-none cursor-pointer transition-all outline-none",
-                    "focus:border-ring focus:ring-ring/50 focus:ring-[3px]",
-                  )}
-                >
-                  {domainOptions.map((d) => (
-                    <option
-                      key={d.value}
-                      value={d.value}
-                      className="bg-background text-foreground"
-                    >
-                      {d.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={16}
-                  className="absolute right-s3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
-                />
-              </div>
-            </div>
-            {emailDomain === "custom" && (
-              <Input
-                {...register("customDomain", {
-                  validate: (value) =>
-                    getValues("emailDomain") === "custom" && !value
-                      ? "도메인을 입력해주세요."
-                      : true,
-                })}
-                placeholder="직접 입력 (예: gmail.com)"
-                className="h-11 rounded-r3 mt-s2"
-              />
-            )}
-          </FormField>
-        </Section>
-
-        {/* 약관 동의 */}
-        <Section icon={ShieldCheck} title="약관 동의">
-          <FormField error={errors.privacyConsent?.message}>
-            <label className="flex items-center gap-s3 cursor-pointer group">
-              <input
-                type="checkbox"
-                {...register("privacyConsent")}
-                className="cursor-pointer accent-primary"
-              />
-              <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
-                개인정보 수집 및 이용에 동의합니다 (필수)
-              </span>
-            </label>
-          </FormField>
-        </Section>
-
         {/* 회비 납부 안내 */}
         <div className="rounded-r4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-s4 space-y-s2">
             <div className="flex items-center gap-s2">
@@ -478,7 +384,7 @@ export default function App() {
         </div>
 
         {/* 하단 고정 CTA */}
-        <div className="sticky bottom-0 z-10 -mx-s4 px-s4 pt-s3 pb-[max(0.5rem,env(safe-area-inset-bottom))] bg-background">
+        <div className="sticky bottom-0 z-10 -mx-s4 px-s4 pt-s3 pb-[max(2rem,calc(env(safe-area-inset-bottom)+24px))] bg-background">
           <Button
             type="button"
             disabled={isSubmitting}

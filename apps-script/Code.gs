@@ -16,7 +16,6 @@ const HEADERS = [
   "학과",
   "학년",
   "재학상태",
-  "이메일",
   "전화번호",
 ];
 
@@ -40,7 +39,6 @@ function doPost(e) {
       data.department || "",
       data.grade || "",
       data.enrollmentStatus || "",
-      data.email || "",
       data.phoneNumber || "",
     ]);
 
