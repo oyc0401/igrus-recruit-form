@@ -12,7 +12,6 @@ import {
   Wallet,
   Copy,
   CircleCheck,
-  ExternalLink,
   type LucideIcon,
 } from "lucide-react";
 import { Button, Input, cn } from "./ui";
@@ -23,9 +22,6 @@ import {
 } from "./constants";
 
 const GAS_URL = import.meta.env.VITE_GAS_URL as string | undefined;
-const SLACK_INVITE_URL = import.meta.env.VITE_SLACK_INVITE_URL as
-  | string
-  | undefined;
 
 const formatPhoneNumber = (digits: string) => {
   if (digits.length < 4) return digits;
@@ -142,30 +138,6 @@ export default function App() {
             IGRUS 가입 신청이 성공적으로 접수되었습니다.
           </p>
         </div>
-
-        {SLACK_INVITE_URL && (
-          <div className="mb-s6">
-            <h2 className="typo-h4 text-foreground mb-s3">
-              슬랙 채널에 참여하세요
-            </h2>
-            <p className="typo-b2 text-muted-foreground mb-s5">
-              IGRUS의 주요 소통은 슬랙에서 이루어집니다.
-              <br />
-              아래 버튼을 눌러 슬랙 워크스페이스에 참여해 주세요.
-            </p>
-            <a
-              href={SLACK_INVITE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block"
-            >
-              <Button type="button" className="w-full h-12 text-base cursor-pointer">
-                IGRUS 슬랙 참여하기
-                <ExternalLink size={16} />
-              </Button>
-            </a>
-          </div>
-        )}
       </div>
     );
   }
